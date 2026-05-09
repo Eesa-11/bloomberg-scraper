@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment Guide – FA23-BAI-031</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sora:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c28;
+    --border: #2a2a3d;
+    --accent: #6c63ff;
+    --accent2: #ff6b6b;
+    --green: #4ade80;
+    --text: #e2e2f0;
+    --muted: #7070a0;
+    --code-bg: #0d0d18;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0a0a0f 0%, #13101f 50%, #0f0a1a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(108,99,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a5a0ff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .toc h2 {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .toc ol {
+    padding-left: 1.2rem;
+  }
+
+  .toc li {
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+  }
+
+  .toc a {
+    color: #a5a0ff;
+    text-decoration: none;
+  }
+
+  .toc a:hover { text-decoration: underline; }
+
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--accent), #9b5de5);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .step-body {
+    padding: 1.4rem 1.5rem;
+  }
+
+  .step-body p {
+    margin-bottom: 0.9rem;
+    font-size: 0.92rem;
+  }
+
+  .step-body ul, .step-body ol {
+    padding-left: 1.3rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .step-body li {
+    margin-bottom: 0.4rem;
+    font-size: 0.92rem;
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    margin: 0.8rem 0;
+    position: relative;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: #c8d3f5;
+    line-height: 1.6;
+  }
+
+  p code, li code {
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.25);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    font-size: 0.82rem;
+    color: #c8d3f5;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .note {
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.25);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.88rem;
+    color: #86efac;
+    margin: 0.8rem 0;
+  }
+
+  .warn {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.25);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.88rem;
+    color: #fca5a5;
+    margin: 0.8rem 0;
+  }
+
+  .kv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.8rem 0;
+  }
+
+  .kv-table td {
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--border);
+  }
+
+  .kv-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    background: var(--surface2);
+    width: 40%;
+    font-size: 0.8rem;
+  }
+
+  .final {
+    background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(155,93,229,0.1));
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .final h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .final p { color: var(--muted); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">FA23-BAI-031 · Bloomberg News · Docker + Selenium</div>
+  <h1>Assignment <span>Complete Guide</span></h1>
+  <p class="hero-sub">Step-by-step instructions — from zero to submitted</p>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="#s1">Install Prerequisites</a></li>
+      <li><a href="#s2">Create the Project Files</a></li>
+      <li><a href="#s3">Create GitHub Repository & Push Code</a></li>
+      <li><a href="#s4">Build the Docker Image</a></li>
+      <li><a href="#s5">Push Image to Docker Hub</a></li>
+      <li><a href="#s6">Test the Running Container</a></li>
+      <li><a href="#s7">Fill the Google Form</a></li>
+    </ol>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step" id="s1">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Install Prerequisites</div>
+    </div>
+    <div class="step-body">
+      <p>You need three things installed on your computer: <strong>Git</strong>, <strong>Docker Desktop</strong>, and a terminal. Follow the links for your OS.</p>
+      <ul>
+        <li><strong>Git:</strong> <a href="https://git-scm.com/downloads" style="color:#a5a0ff">git-scm.com/downloads</a> → install for your OS, keep all defaults</li>
+        <li><strong>Docker Desktop:</strong> <a href="https://www.docker.com/products/docker-desktop/" style="color:#a5a0ff">docker.com/products/docker-desktop</a> → install and <strong>open it</strong> (must be running in background)</li>
+      </ul>
+      <p>After installing, open a terminal (Command Prompt / PowerShell on Windows, Terminal on Mac/Linux) and verify:</p>
+      <pre><code>git --version
+docker --version</code></pre>
+      <p>Both should print version numbers. If they do, you're ready.</p>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="s2">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Create the Project Files</div>
+    </div>
+    <div class="step-body">
+      <p>Create a new folder on your Desktop called <code>bloomberg-scraper</code>. Inside it, create exactly <strong>3 files</strong> with these exact names and contents:</p>
+
+      <span class="label">File 1 — app.py</span>
+      <p>Download <code>app.py</code> from the files Claude provided. This is the main Python server.</p>
+
+      <span class="label">File 2 — requirements.txt</span>
+      <pre><code>flask==3.0.0
+selenium==4.18.1
+requests==2.31.0</code></pre>
+
+      <span class="label">File 3 — Dockerfile</span>
+      <p>Download the <code>Dockerfile</code> from the files Claude provided. No file extension — the filename is literally just <code>Dockerfile</code>.</p>
+
+      <span class="label">File 4 — README.md</span>
+      <p>Download <code>README.md</code> from the files Claude provided.</p>
+
+      <div class="note">✓ Your folder should contain: <code>app.py</code> &nbsp;·&nbsp; <code>requirements.txt</code> &nbsp;·&nbsp; <code>Dockerfile</code> &nbsp;·&nbsp; <code>README.md</code></div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="s3">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">Create GitHub Repository & Push Code</div>
+    </div>
+    <div class="step-body">
+      <p><strong>3a. Create a new repo on GitHub:</strong></p>
+      <ol>
+        <li>Go to <a href="https://github.com/new" style="color:#a5a0ff">github.com/new</a></li>
+        <li>Repository name: <code>bloomberg-scraper</code></li>
+        <li>Set to <strong>Public</strong></li>
+        <li>Do <strong>NOT</strong> check "Add a README file"</li>
+        <li>Click <strong>Create repository</strong></li>
+      </ol>
+
+      <p><strong>3b. Open a terminal, navigate to your folder and push:</strong></p>
+      <pre><code># Navigate into your project folder (adjust path as needed)
+cd ~/Desktop/bloomberg-scraper
+
+# Initialize git
+git init
+
+# Add all files
+git add .
+
+# Commit
+git commit -m "Add Bloomberg scraper with Selenium and Docker"
+
+# Connect to GitHub (replace Eesa11 if needed)
+git remote add origin https://github.com/Eesa11/bloomberg-scraper.git
+
+# Push
+git branch -M main
+git push -u origin main</code></pre>
+
+      <p>GitHub will ask for your username (<code>Eesa11</code>) and a password. Use a <strong>Personal Access Token</strong> as your password — not your GitHub login password:</p>
+      <ol>
+        <li>Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)</li>
+        <li>Click "Generate new token (classic)"</li>
+        <li>Check <code>repo</code> scope → Generate → Copy the token</li>
+        <li>Paste it as your password in the terminal prompt</li>
+      </ol>
+
+      <div class="note">✓ After this, go to <code>github.com/Eesa11/bloomberg-scraper</code> — you should see your 4 files.</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="s4">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">Build the Docker Image</div>
+    </div>
+    <div class="step-body">
+      <p>Make sure <strong>Docker Desktop is open and running</strong>. Then in your terminal (inside the <code>bloomberg-scraper</code> folder):</p>
+
+      <pre><code># Build the image — this takes 5-10 minutes the first time
+docker build -t orakzaieesa11/bloomberg-scraper:latest .</code></pre>
+
+      <p>You'll see a lot of output. Wait until you see something like <code>Successfully built ...</code> or <code>writing image ... done</code>.</p>
+
+      <div class="warn">⚠ If you get an error about Chrome/ChromeDriver, make sure Docker Desktop is actually running (look for the whale icon in your taskbar/menu bar).</div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="s5">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Push Image to Docker Hub</div>
+    </div>
+    <div class="step-body">
+      <p><strong>5a. Login to Docker Hub from terminal:</strong></p>
+      <pre><code>docker login</code></pre>
+      <p>Enter your Docker Hub username (<code>orakzaieesa11</code>) and password.</p>
+
+      <p><strong>5b. Push the image:</strong></p>
+      <pre><code>docker push orakzaieesa11/bloomberg-scraper:latest</code></pre>
+
+      <p>This uploads your image to Docker Hub. Takes a few minutes depending on your internet speed.</p>
+
+      <div class="note">✓ After this, go to <a href="https://hub.docker.com/u/orakzaieesa11" style="color:#4ade80">hub.docker.com/u/orakzaieesa11</a> — you should see the <code>bloomberg-scraper</code> repository.</div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="s6">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">Test the Running Container</div>
+    </div>
+    <div class="step-body">
+      <p>Run the container locally to make sure everything works:</p>
+      <pre><code>docker run -p 7000:7000 orakzaieesa11/bloomberg-scraper:latest</code></pre>
+
+      <p>Wait for it to say something like <code>Running on http://0.0.0.0:7000</code>. Then <strong>open a new terminal tab</strong> and test:</p>
+
+      <pre><code># Basic health check
+curl http://localhost:7000/
+
+# Test with a keyword
+curl "http://localhost:7000/get?keyword=bitcoin"</code></pre>
+
+      <p>Or just open this URL in your browser:</p>
+      <pre><code>http://localhost:7000/get?keyword=bitcoin</code></pre>
+
+      <p>You should get a JSON response like:</p>
+      <pre><code>{
+  "registration": "FA23-BAI-031",
+  "newssource": "Bloomberg",
+  "keyword": "bitcoin",
+  "url": "https://www.bloomberg.com/news/articles/...",
+  "summary": "..."
+}</code></pre>
+
+      <div class="note">✓ If you see JSON with your registration number, everything is working!</div>
+      <p>Press <code>Ctrl+C</code> in the first terminal to stop the container.</p>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="s7">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title">Fill the Google Form</div>
+    </div>
+    <div class="step-body">
+      <p>Go to the submission form: <a href="https://forms.gle/tYyzs9Him98LPDoz6" style="color:#a5a0ff">forms.gle/tYyzs9Him98LPDoz6</a></p>
+      <p>Fill in the fields as follows:</p>
+
+      <table class="kv-table">
+        <tr><td>Registration Number</td><td>FA23-BAI-031</td></tr>
+        <tr><td>GitHub Repo</td><td>https://github.com/Eesa11/bloomberg-scraper</td></tr>
+        <tr><td>Docker Hub Image Name with Tag</td><td>orakzaieesa11/bloomberg-scraper:latest</td></tr>
+        <tr><td>Dockerfile Contents</td><td>Copy-paste the entire content of your Dockerfile</td></tr>
+        <tr><td>Development Environment</td><td>Python 3.11</td></tr>
+      </table>
+
+      <div class="note">✓ Submit the form. You're done!</div>
+    </div>
+  </div>
+
+  <div class="final">
+    <h2>🎉 Assignment Complete</h2>
+    <p>Your Bloomberg News Scraper is built, pushed to Docker Hub, and submitted.<br>Registration: <strong>FA23-BAI-031</strong> · Image: <strong>orakzaieesa11/bloomberg-scraper:latest</strong></p>
+  </div>
+
+</div>
+</body>
+</html>
