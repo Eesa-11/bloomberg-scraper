@@ -6,6 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib.parse import unquote
+import requests
 import time
 import re
 
@@ -47,6 +49,49 @@ def summarize_text(text, max_sentences=4):
     return summary if summary else text[:600]
 
 
+def is_bot_check_page(driver):
+    page_text = (driver.page_source or "").lower()
+    blocked_phrases = [
+        "to continue, please click the box below",
+        "let us know you're not a robot",
+        "not a robot",
+        "please make sure your browser supports javascript and cookies",
+        "verify you are human",
+    ]
+    return any(phrase in page_text for phrase in blocked_phrases)
+
+
+def extract_article_links(page_source):
+    if not page_source:
+        return []
+
+    matches = re.findall(r'https?://www\.bloomberg\.com/news/articles/[A-Za-z0-9_?=&%\-./]+', page_source)
+    links = []
+    for match in matches:
+        clean_link = match.rstrip('"\'<>)]},')
+        if clean_link not in links:
+            links.append(clean_link)
+    return links
+
+
+def search_bloomberg_article(keyword):
+    query = f"site:bloomberg.com/news/articles {keyword} Bloomberg"
+    search_url = f"https://duckduckgo.com/html/?q={requests.utils.quote(query)}"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    response = requests.get(search_url, headers=headers, timeout=15)
+    response.raise_for_status()
+
+    matches = re.findall(r'href="[^"]*uddg=([^"]+)"', response.text)
+    for encoded_link in matches:
+        candidate = unquote(encoded_link)
+        if "bloomberg.com/news/articles/" in candidate:
+            return candidate
+
+    raw_links = extract_article_links(response.text)
+    return raw_links[0] if raw_links else ""
+
+
 def scrape_bloomberg(keyword):
     driver = get_chrome_driver()
     result_url = ""
@@ -57,6 +102,14 @@ def scrape_bloomberg(keyword):
         search_url = f"https://www.bloomberg.com/search?query={keyword}"
         driver.get(search_url)
         time.sleep(4)
+
+        if is_bot_check_page(driver):
+            result_url = search_url
+            summary = (
+                "Bloomberg blocked automated access with a bot-check page, so no "
+                "article text could be extracted. Try opening the URL manually in a browser."
+            )
+            return result_url, summary
 
         # Try to find first search result link
         wait = WebDriverWait(driver, 15)
@@ -102,10 +155,30 @@ def scrape_bloomberg(keyword):
                     article_link = href
                     break
 
+        if not article_link:
+            # Last-resort fallback: parse raw page source for Bloomberg article URLs.
+            for href in extract_article_links(driver.page_source):
+                article_link = href
+                break
+
+        if not article_link:
+            # Final fallback: search the public web for a Bloomberg article URL.
+            try:
+                article_link = search_bloomberg_article(keyword)
+            except Exception:
+                article_link = ""
+
         if article_link:
             result_url = article_link
             driver.get(article_link)
             time.sleep(3)
+
+            if is_bot_check_page(driver):
+                summary = (
+                    "Bloomberg blocked automated access on the article page, so no "
+                    "article text could be extracted."
+                )
+                return result_url, summary
 
             # Extract article text
             text_selectors = [
